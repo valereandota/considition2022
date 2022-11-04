@@ -16,7 +16,7 @@ class Solver:
 
     def Solve(self, bagtype, days):
         self.days = days
-        solution = Solution(True, 10, 1, bagtype)
+        solution = Solution(True, self.bagType_price[bagtype], 1, bagtype)
 
         for day in range(0, days):
             solution.addOrder(self.wasteMoney(bagtype))
