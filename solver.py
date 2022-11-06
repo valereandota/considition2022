@@ -5,8 +5,8 @@ from solution import Solution
 
 class Solver:
     bagType_price = [0, 1.7, 1.75, 6, 25, 200]
-    bagType_co2_production = [0, 5, 7, 3, 6, 20]
-    bagType_co2_transport = [0, 50, 40, 60, 70, 100]
+    bagType_co2_production = [0, 3.0, 4.2, 1.8, 3.6, 12.0]
+    bagType_co2_transport = [0, 30, 24, 36, 42, 60]
 
     def __init__(self, game_info):
         self.days = None
@@ -15,15 +15,12 @@ class Solver:
         self.behavior = game_info["behavior"]
 
 
-    def Solve(self, bagtype, days, recycle):
-        self.days = days
-        refund = 1
+    def Solve(self, bagtype, days, recycle, mode, refund):
+        self.days = days  
+        refund = self.bagType_price[bagtype]/10*refund
+        print(refund)
         solution = Solution(bool(recycle), self.bagType_price[bagtype], refund, bagtype)
         for day in range(0, days):
-            # if day%7 == 0:
-            #     solution.addOrder(self.wasteMoney(bagtype))
-            # else :
-            #     solution.addOrder(self.holdMoney(bagtype))
             number = random.randint(0,4)
             if number == 0:
                 solution.addOrder(self.splitMoney(bagtype))
@@ -40,6 +37,7 @@ class Solver:
 
     def cranked(self):
         return int(self.companyBudget/self.days)
+        
     # Solution 1: "Spend all money day 1"
     def wasteMoney(self, bagtype):
         return int(self.companyBudget / self.bagType_price[bagtype])
