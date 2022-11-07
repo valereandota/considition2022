@@ -6,7 +6,7 @@ import json
 api_key = "c5e9d57d-cd56-4a65-4817-08da97ce1ad5"   # TODO: Your api key here
 # The different map names can be found on considition.com/rules
 # TODO: You map choice here. Unless changed, the map "Suburbia" will be selected.
-map_name = "Suburbia"
+map_name = "Fancyville"
 # TODO: You bag type choice here. Unless changed, the bag type 1 will be selected.
  
 
@@ -14,7 +14,6 @@ map_name = "Suburbia"
 def main():
 	highscore = 0
 	runs = 10
-	
 	recycle = [0,1]
 	bags = [1,2,3,4,5]
 	print("Starting game...")
@@ -39,13 +38,14 @@ def run_logic(response, highscore, runs, bags, recycle, mode):
 							submit_game_response = api.submit_game(api_key, map_name, solution)
 							print(f'Result for map {map_name} with bag type {bag_type}')
 							print(submit_game_response.get('dailys')[-1])
-							score = submit_game_response.get('dailys')[-1].get('customerScore') - submit_game_response.get('dailys')[-1].get('c02')
+							score = submit_game_response.get('dailys')[-1].get('positiveCustomerScore') - submit_game_response.get('dailys')[-1].get('c02')
 							if score > highscore:
 								highscore = score
 								best_sol = solution
 							print('Score = '+str(score))
 						except Exception:
 							pass
+	print(highscore)
 	return highscore, best_sol
 
 def store_data(params, sol):
