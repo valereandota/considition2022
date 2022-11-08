@@ -15,13 +15,13 @@ class Solver:
         self.behavior = game_info["behavior"]
 
 
-    def Solve(self, bagtype, days, recycle, mode, refund):
+    def Solve(self, bagtype, days, recycle, mode, refund, price):
         self.days = days  
         refund = self.bagType_price[bagtype]/10*refund
         print(refund)
-        solution = Solution(bool(recycle), self.bagType_price[bagtype], refund, bagtype)
+        solution = Solution(bool(recycle), self.bagType_price[bagtype]/10*price, refund, bagtype)
         for day in range(0, days):
-            number = random.randint(0,4)
+            number = random.randint(0,3)
             if number == 0:
                 solution.addOrder(self.splitMoney(bagtype))
             elif number == 1:

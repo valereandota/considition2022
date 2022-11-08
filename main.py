@@ -13,7 +13,7 @@ map_name = "Fancyville"
 
 def main():
 	highscore = 0
-	runs = 10
+	runs = 1
 	recycle = [0,1]
 	bags = [1,2,3,4,5]
 	print("Starting game...")
@@ -21,30 +21,31 @@ def main():
 	highscore, best_sol = run_logic(response, highscore, runs+1, bags, recycle, 1)
 	print(f'Highscore: {highscore}')
 	print(best_sol.bagPrice, best_sol.bagType, best_sol.recycleRefundChoice, best_sol.refundAmount, best_sol.orders)
-	highscore, best_sol = run_logic(response, highscore, 1000, [best_sol.bagType], [best_sol.recycleRefundChoice], 2)
+	highscore, best_sol = run_logic(response, highscore, 100, [best_sol.bagType], [best_sol.recycleRefundChoice], 2)
 	print(highscore)
 	store_data(highscore, best_sol.toJSON())
 
 def run_logic(response, highscore, runs, bags, recycle, mode):
 	for bag in bags:
-		for ref in range(1,11): 
-			for rec in recycle:
-					for iteration in range(1,runs):
-						try:
-							bag_type = bag
-							days = 31 if map_name == "Suburbia" or map_name == "Fancyville" else 365
-							solver = Solver(game_info=response)
-							solution = solver.Solve(bag_type, days, rec, mode, ref)
-							submit_game_response = api.submit_game(api_key, map_name, solution)
-							print(f'Result for map {map_name} with bag type {bag_type}')
-							print(submit_game_response.get('dailys')[-1])
-							score = submit_game_response.get('dailys')[-1].get('positiveCustomerScore') - submit_game_response.get('dailys')[-1].get('c02')
-							if score > highscore:
-								highscore = score
-								best_sol = solution
-							print('Score = '+str(score))
-						except Exception:
-							pass
+		for price in range(1,11):
+			for ref in range(1,11): 
+				for rec in recycle:
+						for iteration in range(1,runs):
+							try:
+								bag_type = bag
+								days = 31 if map_name == "Suburbia" or map_name == "Fancyville" else 365
+								solver = Solver(game_info=response)
+								solution = solver.Solve(bag_type, days, rec, mode, ref, price)
+								submit_game_response = api.submit_game(api_key, map_name, solution)
+								print(f'Result for map {map_name} with bag type {bag_type}')
+								print(submit_game_response.get('dailys')[-1])
+								score = submit_game_response.get('dailys')[-1].get('positiveCustomerScore') - submit_game_response.get('dailys')[-1].get('c02')
+								if score > highscore:
+									highscore = score
+									best_sol = solution
+								print('Score = '+str(score))
+							except Exception:
+								pass
 	print(highscore)
 	return highscore, best_sol
 
