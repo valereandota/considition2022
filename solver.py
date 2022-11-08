@@ -18,18 +18,17 @@ class Solver:
     def Solve(self, bagtype, days, recycle, mode, refund, price):
         self.days = days  
         refund = self.bagType_price[bagtype]/10*refund
-        print(refund)
         solution = Solution(bool(recycle), self.bagType_price[bagtype]/10*price, refund, bagtype)
         for day in range(0, days):
-            number = random.randint(0,3)
+            number = random.randint(0,2)
             if number == 0:
                 solution.addOrder(self.splitMoney(bagtype))
             elif number == 1:
                 solution.addOrder(self.holdMoney(bagtype))
             elif number == 2:
-                solution.addOrder(self.cranked())
-            else : 
                 solution.addOrder(self.wasteMoney(bagtype))
+            else : 
+                solution.addOrder(self.cranked())
         return solution
 
     def rand_test(self):
